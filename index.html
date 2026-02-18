@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 24px; background: #f6f7f9; }
+    .card { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    p { margin: 0 0 16px; color: #444; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { display: block; font-size: 12px; color: #555; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #d7dbe0; border-radius: 10px; font-size: 14px; }
+    .row { margin-top: 12px; }
+    .result { margin-top: 16px; padding: 12px; border: 1px dashed #c9ced6; border-radius: 12px; background: #fafbfc; }
+    .result div { display: flex; justify-content: space-between; padding: 6px 0; }
+    .muted { color: #666; font-size: 12px; }
+    button { margin-top: 14px; width: 100%; padding: 12px; border: 0; border-radius: 12px; background: #111; color: #fff; font-size: 14px; cursor: pointer; }
+    button:active { transform: translateY(1px); }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Simple Calculator</h1>
+    <p class="muted">Edit the inputs. Results update instantly.</p>
+
+    <div class="grid">
+      <div>
+        <label for="a">Input A</label>
+        <input id="a" type="number" value="100" step="0.01" />
+      </div>
+      <div>
+        <label for="b">Input B</label>
+        <input id="b" type="number" value="25" step="0.01" />
+      </div>
+      <div>
+        <label for="rate">Rate (%)</label>
+        <input id="rate" type="number" value="7.55" step="0.01" />
+      </div>
+      <div>
+        <label for="years">Years</label>
+        <input id="years" type="number" value="1" step="1" />
+      </div>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div><span>Sum (A + B)</span><strong id="sum">$0.00</strong></div>
+      <div><span>Product (A × B)</span><strong id="prod">$0.00</strong></div>
+      <div><span>Interest (A × rate × years)</span><strong id="int">$0.00</strong></div>
+    </div>
+
+    <button id="reset" type="button">Reset</button>
+  </div>
+
+  <script>
+    const fmt = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(n || 0);
+
+    const els = {
+      a: document.getElementById("a"),
+      b: document.getElementById("b"),
+      rate: document.getElementById("rate"),
+      years: document.getElementById("years"),
+      sum: document.getElementById("sum"),
+      prod: document.getElementById("prod"),
+      int: document.getElementById("int"),
+      reset: document.getElementById("reset"),
+    };
+
+    const defaults = { a: 100, b: 25, rate: 7.55, years: 1 };
+
+    function val(id) { return parseFloat(els[id].value || "0"); }
+
+    function recalc() {
+      const a = val("a");
+      const b = val("b");
+      const r = val("rate") / 100;
+      const y = val("years");
+
+      els.sum.textContent = fmt(a + b);
+      els.prod.textContent = fmt(a * b);
+      els.int.textContent = fmt(a * r * y);
+    }
+
+    ["a","b","rate","years"].forEach(id => els[id].addEventListener("input", recalc));
+
+    els.reset.addEventListener("click", () => {
+      els.a.value = defaults.a;
+      els.b.value = defaults.b;
+      els.rate.value = defaults.rate;
+      els.years.value = defaults.years;
+      recalc();
+    });
+
+    recalc();
+  </script>
+</body>
+</html>
