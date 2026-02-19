@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interest Reallocation Calculator</title>
+
+<style>
+:root{
+  --bg0:#070A0D;
+  --bg1:#0B0F14;
+  --card:#0E141B;
+  --card2:#0B1117;
+
+  --text:#F3F5F7;
+  --muted:rgba(243,245,247,.72);
+  --line:rgba(243,245,247,.12);
+
+  --gold:#C9A35A;
+  --gold2:#E0C27A;
+
+  --field:#0A1016;
+  --fieldBorder:rgba(201,163,90,.30);
+
+  --shadow:0 18px 50px rgba(0,0,0,.55);
+  --radius:18px;
+
+  --danger:#ff5a5f;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 600px at 70% 10%, rgba(201,163,90,.18), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  min-height:100vh;
+}
+
+.wrap{max-width:860px;margin:32px auto;padding:0 16px 60px;}
+
+.topbar{
+  margin-bottom:18px;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.card{
+  background:var(--card);
+  border:1px solid rgba(201,163,90,.18);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+header{
+  padding:28px;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(900px 220px at 70% 0%, rgba(201,163,90,.18), transparent 60%);
+}
+
+h1{margin:0 0 12px;font-size:20px;}
+p{margin:0;font-size:13px;color:var(--muted);line-height:1.6;}
+
+.content{padding:28px;display:grid;gap:22px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+label{
+  display:block;
+  font-size:13px;
+  margin-bottom:8px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+label small{
+  display:block;
+  font-size:12px;
+  margin-top:4px;
+  color:rgba(255,255,255,.55);
+  font-style:italic;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--fieldBorder);
+  background:var(--field);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,163,90,.18);
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.pill{
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  border:1px solid rgba(201,163,90,.25);
+  background:rgba(255,255,255,.03);
+  color:var(--muted);
+}
+
+.pill strong{color:var(--text);}
+
+button{
+  padding:10px 16px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  background:linear-gradient(135deg, var(--gold2), var(--gold));
+  color:#111;
+  font-weight:700;
+}
+
+button.secondary{
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  border:1px solid var(--line);
+}
+
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+}
+
+.panel{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  font-variant-numeric:tabular-nums;
+}
+
+.big{
+  font-weight:700;
+  font-size:16px;
+  color:var(--gold2);
+}
+
+.foot{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.foot a{
+  color:var(--gold2);
+  text-decoration:none;
+}
+
+.foot a:hover{ text-decoration:underline; }
+
+.notice{
+  font-size:12px;
+  color:var(--danger);
+  margin-top:6px;
+}
+
+.hidden{display:none;}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="topbar">EisnerAmper National Tax</div>
+
+  <div class="card">
+    <header>
+      <h1>Interest Reallocation Calculator - Inventory and Fixed Assets</h1>
+      <p>
+        Interest limited? Estimate the interest you may be able to accelerate into the 2025 tax year
+        using a Section 266 allocation to inventory and fixed assets.
+      </p>
+    </header>
+
+    <div class="content">
+
+      <div class="grid">
+        <div>
+          <label>Average annual debt balance (monthly or quarterly averages)</label>
+          <input id="avgDebt" value="40,000,000">
+        </div>
+
+        <div>
+          <label>Total annual interest expense</label>
+          <input id="totInt" value="3,020,000">
+        </div>
+
+        <div>
+          <label>Average annual direct and indirect inventory expenditures (monthly or quarterly averages)</label>
+          <input id="avgInvEx" value="35,670,000">
+        </div>
+
+        <div>
+          <label>Average annual fixed asset expenditures (monthly or quarterly averages)</label>
+          <input id="avgFAEx" value="304,000">
+        </div>
+
+        <div>
+          <label>
+            Percentage of inventory remaining at year end
+            <small>(Not sure? This is typically 15%–30%.)</small>
+          </label>
+          <input id="endRatio" value="0.54">
+        </div>
+      </div>
+
+      <div class="actions">
+        <span class="pill">
+          Weighted Average Interest Rate (WAIR):
+          <strong id="wair">—</strong>
+        </span>
+        <button class="secondary" id="reset" type="button">Reset</button>
+        <button id="calculate" type="button" disabled>Calculate</button>
+        <button id="copyResults" type="button" disabled>Copy Results</button>
+      </div>
+
+      <div id="results" class="hidden">
+        <div class="panel">
+          <div class="row"><span>Inventory capitalizable interest</span><strong id="capInv">$0</strong></div>
+          <div class="row"><span>Fixed assets capitalizable interest</span><strong id="capFA">$0</strong></div>
+          <div class="row big"><span>Total Section 266 interest</span><span id="totCap">$0</span></div>
+        </div>
+
+        <div class="panel">
+          <div class="row"><span>Allocated to ending inventory</span><strong id="toEnd">$0</strong></div>
+          <div class="row"><span>Allocated to COGS</span><strong id="toCogs">$0</strong></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="foot" style="margin:0;">
+          For further information, please reach out to
+          <a href="mailto:Jeffrey.kelson@eisneramper.com">Jeffrey.kelson@eisneramper.com</a>;
+          <a href="mailto:Ben.white@eisneramper.com">Ben.white@eisneramper.com</a>;
+          <a href="mailto:Jaime.garciadeparedes@eisneramper.com">Jaime.garciadeparedes@eisneramper.com</a>.
+        </p>
+
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-top:12px;">
+          <input id="agree" type="checkbox" style="margin-top:3px;accent-color:var(--gold);">
+          <div>
+            <div style="font-size:12px;margin-bottom:6px;">
+              I acknowledge and agree to the disclaimer below before using this tool.
+            </div>
+            <p class="foot" style="margin:0;">
+              Disclaimer: This tool provides a rough, directional estimate and is not a precise or audit-ready calculation.
+              Results are for preliminary scoping purposes only and rely on averaged inputs and simplified assumptions.
+              Actual outcomes depend on the taxpayer’s specific facts, documentation, capitalization methodology,
+              and applicable limitations, including Section 163(j). This tool is for internal use only and you agree
+              not to share it with anyone outside of the firm. This tool is for informational purposes only and does not
+              constitute tax, legal, or accounting advice. Use of this tool does not create a client relationship with
+              EisnerAmper LLP or any of its professionals. Users should consult their tax advisor regarding their specific circumstances.
+            </p>
+          </div>
+        </div>
+
+        <div id="gateMsg" class="notice">
+          You must agree to the disclaimer before calculating.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const defaults = {
+  avgDebt: "40,000,000",
+  totInt: "3,020,000",
+  avgInvEx: "35,670,000",
+  avgFAEx: "304,000",
+  endRatio: "0.54"
+};
+
+function parseCurrency(v){
+  return parseFloat(String(v).replace(/[^0-9.-]/g,'')) || 0;
+}
+
+function money(n){
+  return new Intl.NumberFormat('en-US',{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n||0);
+}
+
+function pct(n){
+  return new Intl.NumberFormat('en-US',{style:"percent",minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0);
+}
+
+function compute(){
+  const avgDebt = parseCurrency($("avgDebt").value);
+  const totInt  = parseCurrency($("totInt").value);
+  const avgInvEx= parseCurrency($("avgInvEx").value);
+  const avgFAEx = parseCurrency($("avgFAEx").value);
+  const endRatio= parseFloat($("endRatio").value) || 0;
+
+  const wair   = avgDebt !== 0 ? (totInt / avgDebt) : 0;
+  const capInv = avgInvEx * wair;
+  const capFA  = avgFAEx * wair;
+  const totCap = capInv + capFA;
+
+  const toEnd  = capInv * endRatio;
+  const toCogs = capInv - toEnd;
+
+  $("wair").textContent   = pct(wair);
+  $("capInv").textContent = money(capInv);
+  $("capFA").textContent  = money(capFA);
+  $("totCap").textContent = money(totCap);
+  $("toEnd").textContent  = money(toEnd);
+  $("toCogs").textContent = money(toCogs);
+
+  $("results").classList.remove("hidden");
+  $("copyResults").disabled = false;
+}
+
+function copyResults(){
+  const lines = [
+    `Weighted Average Interest Rate (WAIR): ${$("wair").textContent}`,
+    `Inventory capitalizable interest: ${$("capInv").textContent}`,
+    `Fixed assets capitalizable interest: ${$("capFA").textContent}`,
+    `Total Section 266 interest: ${$("totCap").textContent}`,
+    `Allocated to ending inventory: ${$("toEnd").textContent}`,
+    `Allocated to COGS: ${$("toCogs").textContent}`
+  ];
+  const text = lines.join("\n");
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = $("copyResults");
+    const old = btn.textContent;
+    btn.textContent = "Copied";
+    setTimeout(() => btn.textContent = old, 1200);
+  });
+}
+
+$("agree").addEventListener("change", () => {
+  const ok = $("agree").checked;
+  $("calculate").disabled = !ok;
+  $("gateMsg").classList.toggle("hidden", ok);
+});
+
+$("calculate").addEventListener("click", compute);
+
+$("reset").addEventListener("click", () => {
+  Object.entries(defaults).forEach(([k,v]) => $(k).value = v);
+  $("results").classList.add("hidden");
+  $("copyResults").disabled = true;
+  $("wair").textContent = "—";
+});
+
+$("copyResults").addEventListener("click", copyResults);
+</script>
+
+</body>
+</html>
